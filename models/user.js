@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      //設定關聯
+      User.hasMany(models.Todo)
     }
   }
   User.init({

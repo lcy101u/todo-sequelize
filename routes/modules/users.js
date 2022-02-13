@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
-
+const db = require('../../models')
+const User = db.User
+const Todo = db.Todo
 //登入
 router
   .route('/login')
@@ -18,7 +20,9 @@ router
     res.render('register')
   })
   .post((req, res) => {
-    res.send('register')
+    const { name, email, password, confirmPassword } = req.body
+    User.create({ name, email, password })
+      .then(user => res.redirect('/'))
   })
 
 //登出
