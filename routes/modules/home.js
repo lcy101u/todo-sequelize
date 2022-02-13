@@ -6,13 +6,18 @@ const Todo = db.Todo
 
 //首頁
 router.get('/', (req, res) => {
-   return Todo.findAll({
-    //在「查詢多筆資料」的情境，需要將這包參數傳給 findAll()，才能在樣板裡使用資料。
-    raw: true,
-    nest: true
-  })
-    .then((todos) => { return res.render('index', { todos: todos }) })
-    .catch((error) => { return res.status(422).json(error) })
+   User.findByPk(req.user.id)
+    .then((user) => {
+      if (!user) throw new Error('user not found')
+
+      return Todo.findAll({
+        raw: true,
+        nest: true,
+        where: { UserId: req.user.id }
+      })
+    })
+    .then(todos => res.render('index', { todos }))
+    .catch(error => console.error(error))
 })
 
 module.exports = router
